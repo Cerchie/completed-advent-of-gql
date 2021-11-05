@@ -15,16 +15,23 @@
     ></script>
   </head>
   <body class="flex justify-center items-center h-screen">
-    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+    <form             action="/"
+    method="POST"
+    x-data="Form()"
+    @submit.prevent="submitData"
+    >
+    <div class="max-w-sm rounded overflow-hidden shadow-lg"  x-data="submitData()">
+
       <img
         class="w-full"
-        src="https://images.unsplash.com/photo-1544634440-f49b8e23e85b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2332&q=80"
+        x-bind:src="formData.message"
         alt="Sunset in the mountains"
       />
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">Happy Advent of GraphQL!</div>
         <p class="text-gray-700 text-base">
           Generate a random image from Unsplash.
+
           <button
             class="
               bg-blue-500
@@ -37,11 +44,77 @@
               mt-2
             "
           >
-            New Image
+            Submit
           </button>
+      
         </p>
       </div>
+    </form>
       <div class="px-6 pt-4 pb-2"></div>
     </div>
+
+    </body>
+    </body>
+
+    <!-- AlpineJS logic begins here  -->
+    <script>
+      function Form() {
+        return {
+          formData: {
+            object: "Root",
+            prefix: "",
+            json: "",
+          },
+          message: "",
+          loading: false,
+          buttonLabel: "Submit",
+
+          submitData() {
+            const j = JSON.stringify(editor.get());
+            this.buttonLabel = "Submitting...";
+            this.loading = true;
+            this.message = "";
+            const body = JSON.stringify({
+              operationName: "MyQuery",
+              query: `query MyQuery {
+  unsplash_Random_Photo {
+    urls {
+      full
+    }
+  }
+}`,
+              variables: {
+                json: j,
+                type: this.formData.object,
+                prefix: this.formData.prefix,
+              },
+            });
+            fetch(
+              "https://staginggraphql88.stepzen.net/api/88912f9ae4a47ecd9418a11864ca75fb/__graphql",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: body,
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data.unsplash_Random_Photo.urls.full);
+                this.message = data;
+              })
+              .catch((err) => {
+                console.log(err);
+                this.message = "Ooops! Something went wrong!";
+              })
+              .finally(() => {
+                this.loading = false;
+                this.buttonLabel = "Submit";
+              });
+          },
+        };
+      }
+    </script>
   </body>
 </html>
