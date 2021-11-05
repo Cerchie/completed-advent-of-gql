@@ -1,0 +1,3 @@
+schema @sdl(files: ["unsplash/unsplash.graphql"]) {
+  query: Query
+}

@@ -10,8 +10,8 @@
       rel="stylesheet"
     />
     <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
       defer
-      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
   <body class="flex justify-center items-center h-screen">
@@ -20,11 +20,11 @@
     x-data="Form()"
     @submit.prevent="submitData"
     >
-    <div class="max-w-sm rounded overflow-hidden shadow-lg"  x-data="submitData()">
+    <div class="max-w-sm rounded overflow-hidden shadow-lg">
 
       <img
         class="w-full"
-        x-bind:src="formData.message"
+        x-bind:src="message"
         alt="Sunset in the mountains"
       />
       <div class="px-6 py-4">
@@ -58,7 +58,17 @@
 
     <!-- AlpineJS logic begins here  -->
     <script>
-      function Form() {
+      let queryString = `query MyQuery {
+  unsplash_Random_Photo {
+    urls {
+      full
+    }
+  }
+}`
+     let queryBody = { query: queryString }
+
+      async function Form() {
+       
         return {
           formData: {
             object: "Root",
@@ -76,43 +86,16 @@
             this.message = "";
             const body = JSON.stringify({
               operationName: "MyQuery",
-              query: `query MyQuery {
-  unsplash_Random_Photo {
-    urls {
-      full
-    }
-  }
-}`,
+              query: queryBody,
               variables: {
                 json: j,
                 type: this.formData.object,
                 prefix: this.formData.prefix,
               },
             });
-            fetch(
-              "https://staginggraphql88.stepzen.net/api/88912f9ae4a47ecd9418a11864ca75fb/__graphql",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: body,
-              }
-            )
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data.unsplash_Random_Photo.urls.full);
-                this.message = data;
-              })
-              .catch((err) => {
-                console.log(err);
-                this.message = "Ooops! Something went wrong!";
-              })
-              .finally(() => {
-                this.loading = false;
-                this.buttonLabel = "Submit";
-              });
-          },
+           const result = await axios.post('/api/unsplash', queryBody).then((res) => { console.log(res.data)}),
+           return result;
+          }
         };
       }
     </script>
