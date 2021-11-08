@@ -43,8 +43,11 @@
                 rounded
                 mt-2
               "
+             
               :disabled="isLoading"
               x-text="buttonLabel"
+ 
+            
             >
      
             </button>
@@ -68,15 +71,17 @@
                      buttonLabel: "Submit",
 
                     async submitData() {
-                       this.buttonLabel = "Submit";
+                       this.buttonLabel = "Submitting";
                        this.isLoading = true;
                        this.message = "";
                        await axios.get(`http://localhost:3002/unsplash`).then((res) => { this.message = res.data.data.data.unsplash_Random_Photo.urls.full});
                        console.log('message',this.message)
-                      },
-                  
-                   };
+                       this.buttonLabel = "Submit again to see a new image"
                    this.isLoading = false;
+                      },
+
+                   };
+
 
                  }
                  
