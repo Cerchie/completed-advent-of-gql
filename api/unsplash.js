@@ -1,16 +1,38 @@
-import axios from "axios";
-var express = require("express");
-var app = express();
+const axios = require("axios");
+const { query } = require("express");
+const express = require("express");
+const app = express();
+const nocache = require("nocache");
+var cors = require("cors");
+require("dotenv").config();
+
+app.use(cors());
+app.use(nocache()); //so that we get a new picture each time
 
 const headers = {
-  Authorization: `Client-ID ${process.env.STEPZEN_API_KEY}`,
+  Authorization: `apikey ${process.env.STEPZEN_API_KEY}`,
   "Content-Type": "application/json",
 };
 
-export default async (req, res) => {};
+const URL = `${process.env.STEPZEN_API_URL}`;
+let queryString = `query MyQuery { unsplash_Random_Photo {
+    urls {
+      full
+    }
+  }
+}`;
 
-app.get("/unsplash", function (req, res) {
-  const URL = `${process.env.STEPZEN_API_URL}`;
-  const response = await axios.post(URL, req.body, { headers: headers });
-  res.status(200).json({ data: response.data });
+let queryBody = { query: queryString };
+app.get("/unsplash", async function (req, res, next) {
+  req.body = queryBody;
+  try {
+    const response = await axios.post(URL, req.body, { headers: headers });
+    res.status(200).json({ data: response.data });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+app.listen(3002, function () {
+  console.log(`Server starting on port 3002`);
 });
