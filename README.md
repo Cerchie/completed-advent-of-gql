@@ -42,7 +42,7 @@ You'll use this endpoint in your .env
 This will look like:
 
 ```
-STEPZEN_API_URL={{https://username.stepzen.net/api/random-name/__graphql}} (not localhost url)
+STEPZEN_API_URL={{https://username.stepzen.net/api/random-name/__graphql}}
 STEPZEN_API_KEY={{KEY_HERE}}
 ```
 
