@@ -57,7 +57,7 @@
     <!-- AlpineJS logic begins here  -->
     <script>
       function Form() {
-
+        const access_url = process.env.ACCESS_URL || 'http://localhost:3002'
                    return {
                      imgurl: "",
                      isLoading: false,
@@ -67,7 +67,7 @@
                        this.buttonLabel = "Submitting";
                        this.isLoading = true;
                        this.imgurl = "";
-                       await axios.get(`http://localhost:3002/unsplash`).then((res) => { this.imgurl = res.data.data.data.unsplash_Random_Photo.urls.full});
+                       await axios.get(`${access_url}/unsplash`).then((res) => { this.imgurl = res.data.data.data.unsplash_Random_Photo.urls.full});
                     
                        this.buttonLabel = "Submit again to see a new image"
                        this.isLoading = false;

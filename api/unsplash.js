@@ -32,6 +32,6 @@ app.get("/unsplash", async function (req, res, next) {
   }
 });
 
-app.listen(3002, function () {
-  console.log(`Server starting on port 3002`);
+app.listen(`${process.env.PORT}`, function () {
+  console.log(`Server starting on port ${process.env.PORT}`);
 });
