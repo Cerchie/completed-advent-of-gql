@@ -13,12 +13,14 @@ const headers = {
 
 const URL = `${process.env.STEPZEN_API_URL}`;
 
-let queryString = `query MyQuery { unsplash_Random_Photo {
+let queryString = `query MyQuery {unsplash_Random_Photo_By_Query(query: "snowflake") {
     urls {
       full
     }
   }
-}`;
+}
+
+`;
 
 let queryBody = { query: queryString };
 

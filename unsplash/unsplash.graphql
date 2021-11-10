@@ -620,6 +620,14 @@ type Query {
       ]
       configuration: "unsplash_config"
     )
+  unsplash_Random_Photo_By_Query(query: String): Unsplash_Random_Photo
+    @rest(
+      endpoint: "https://api.unsplash.com/photos/random"
+      headers: [
+        { name: "Authorization", value: "Client-ID $unsplash_clientId" }
+      ]
+      configuration: "unsplash_config"
+    )
 }
 
 """
