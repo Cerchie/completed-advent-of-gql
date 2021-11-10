@@ -1,13 +1,10 @@
 const axios = require("axios");
-const { query } = require("express");
 const express = require("express");
 const app = express();
-const nocache = require("nocache");
 var cors = require("cors");
 require("dotenv").config();
 
 app.use(cors());
-app.use(nocache()); //so that we get a new picture each time
 
 const headers = {
   Authorization: `apikey ${process.env.STEPZEN_API_KEY}`,
@@ -15,6 +12,7 @@ const headers = {
 };
 
 const URL = `${process.env.STEPZEN_API_URL}`;
+
 let queryString = `query MyQuery { unsplash_Random_Photo {
     urls {
       full
@@ -23,6 +21,7 @@ let queryString = `query MyQuery { unsplash_Random_Photo {
 }`;
 
 let queryBody = { query: queryString };
+
 app.get("/unsplash", async function (req, res, next) {
   req.body = queryBody;
   try {

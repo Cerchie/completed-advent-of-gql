@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Random Image Generator</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.5.0/dist/cdn.min.js"></script>
     <link
@@ -13,8 +12,10 @@
       rel="stylesheet"
     /> 
   </head>
+
   <main>
   <body class="flex justify-center items-center h-screen">
+    <!-- everything that relies on the function in the bottom script needs to be wrapped in the form to 'know' about the functions -->
     <form
       action="/"
       method="POST"
@@ -22,11 +23,10 @@
       @submit.prevent="submitData"
 
     >
-      <div class="max-w-sm rounded overflow-hidden shadow-lg">
-        
+      <div class="max-w-sm rounded overflow-hidden shadow-lg">      
         <img
           class="w-full"
-          :src="message"
+          :src="imgurl"
         />
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Happy Advent of GraphQL!</div>
@@ -43,48 +43,38 @@
                 rounded
                 mt-2
               "
-             
               :disabled="isLoading"
               x-text="buttonLabel"
- 
-            
             >
-     
             </button>
           </p>
         </div>
-
         <div class="px-6 pt-4 pb-2"></div>
       </div>
     </form>
   </main>
+
     <!-- AlpineJS logic begins here  -->
     <script>
       function Form() {
+
                    return {
-                     formData: {
-                       object: "Root",
-                       prefix: ""
-                     },
-                     message: "",
+                     imgurl: "",
                      isLoading: false,
                      buttonLabel: "Submit",
 
                     async submitData() {
                        this.buttonLabel = "Submitting";
                        this.isLoading = true;
-                       this.message = "";
-                       await axios.get(`http://localhost:3002/unsplash`).then((res) => { this.message = res.data.data.data.unsplash_Random_Photo.urls.full});
-                       console.log('message',this.message)
+                       this.imgurl = "";
+                       await axios.get(`http://localhost:3002/unsplash`).then((res) => { this.imgurl = res.data.data.data.unsplash_Random_Photo.urls.full});
+                    
                        this.buttonLabel = "Submit again to see a new image"
-                   this.isLoading = false;
+                       this.isLoading = false;
                       },
-
                    };
-
-
-                 }
-                 
+                 }            
     </script>
+
   </body>
 </html>
